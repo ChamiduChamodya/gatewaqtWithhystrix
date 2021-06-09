@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/**
+          filters:
+          - name: Hystrix
+            args:
+              name: order-service
+              fallbackUri: forward:/orderFallBack
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**
+          filters:
+          - name: Hystrix
+            args:
+              name: payment-service
+              fallbackUri: forward:/paymentFallback
+
